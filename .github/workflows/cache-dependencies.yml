@@ -13,9 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Step 2: Cache dependencies
     - name: Cache dependencies
       id: cache-dependencies
       uses: actions/cache@v4
@@ -27,7 +29,12 @@ jobs:
         restore-keys: |
           cache-70d3f98-${{ runner.os }}-
 
-    - name: Prime cache hit/miss result
+    # Step 3: Prime cache and echo hit/miss result
+    - name: prime-cache-70d3f98
       run: |
-        echo "Cache hit/miss result:"
-        echo "Cache hit or miss"
+        echo "Cache hit or miss result:"
+        if [ -z "${{ steps.cache-dependencies.outputs.cache-hit }}" ]; then
+          echo "Cache miss"
+        else
+          echo "Cache hit"
+        fi
