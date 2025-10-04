@@ -1,0 +1,33 @@
+name: Cache Dependencies
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Cache dependencies
+      id: cache-dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.npm
+          node_modules/
+        key: cache-70d3f98-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          cache-70d3f98-${{ runner.os }}-
+
+    - name: Prime cache hit/miss result
+      run: |
+        echo "Cache hit/miss result:"
+        echo "Cache hit or miss"
